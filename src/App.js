@@ -1,23 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import { useState } from 'react';
 
 function App() {
+  const [post, setPost] = useState({
+    title: '',
+    body: ''
+  })
+  const handleInput = (event) => {
+    setPost({...post, [event.target.name]: event.target.value})
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    axios.post('https://jsonplaceholder.typicode.com/posts', {post})
+    .then (response => console.log(response))
+    .catch(err => console.log(err));
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={handleSubmit}>
+        Title: <input type="text" onChange={handleInput} name="title"></input><br /><br />
+        Post: <input type="text" onChange={handleInput} name="body"></input><br /><br />
+        <button>Submit</button>
+      </form>
     </div>
   );
 }
